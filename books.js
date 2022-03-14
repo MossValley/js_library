@@ -1,7 +1,7 @@
 const myLibrary = [];
 let addBookFormOpen = false;
 const read = 'Read it'
-const undread = 'Not read yet'
+const unread = 'Not read yet'
 
 function Book(title, author, pages, read=false) {
   this.title = title;
@@ -46,7 +46,7 @@ function addBookToLibrary (book, index) {
     if (key === 'haveRead') {
       const btn = document.createElement('button');
       btn.id = `bkbtn${index}`;
-      btn.textContent = book[key] ? read : undread;
+      btn.textContent = book[key] ? read : unread;
       btn.addEventListener('click', () => {
         updateRead(btn.id, index);
       })
@@ -71,7 +71,7 @@ function addBookToLibrary (book, index) {
 function updateRead(button, index) {
   myLibrary[index].toggleReadStatus();
   const btn = document.getElementById(button);
-  btn.textContent = myLibrary[index].haveRead ? read : undread;
+  btn.textContent = myLibrary[index].haveRead ? read : unread;
 }
 
 function deleteBook(index) {
@@ -136,6 +136,7 @@ function form() {
 
 function submitBook(formInfo, book) {
   Object.keys(book).forEach((field) => {
+    if (field === 'info') { return }
     book[field] = formInfo[field].value;
   })
   myLibrary.push(book);
