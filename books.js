@@ -1,7 +1,7 @@
 const myLibrary = [];
 let addBookFormOpen = false;
-const read = 'Read it'
-const unread = 'Not read yet'
+const read = 'Yes'
+const unread = 'No'
 
 function Book(title, author, pages, read=false) {
   this.title = title;
@@ -10,7 +10,7 @@ function Book(title, author, pages, read=false) {
   this.haveRead = read;
 
   this.info = () => {
-    return `${title} by ${author}, ${pages} pages, ${this.haveRead ? 'read' : 'not read yet'}`;
+    return `${title} by ${author}, ${pages} pages, ${this.haveRead ? 'Has been read' : 'not read yet'}`;
   };
 }
 
@@ -46,7 +46,8 @@ function addBookToLibrary (book, index) {
     if (key === 'haveRead') {
       const btn = document.createElement('button');
       btn.id = `bkbtn${index}`;
-      btn.textContent = book[key] ? read : unread;
+      console.log('book key', book.haveRead);
+      btn.textContent = (book.haveRead === "true" ? read : unread);
       btn.addEventListener('click', () => {
         updateRead(btn.id, index);
       })
@@ -113,10 +114,20 @@ function form() {
     const lineBeak1 = document.createElement('br');
     const lineBeak2 = document.createElement('br');
     const label = document.createElement('label');
+    const input = document.createElement('input');
+    if (key === 'haveRead') {
+      input.setAttribute('type', 'checkbox');
+      input.value = false;
+      input.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          input.value = true;
+        }
+      })
+    } else {
+      input.setAttribute('type', 'text')
+    }
     label.setAttribute('for', key);
     label.textContent = key;
-    const input = document.createElement('input');
-    input.setAttribute('type', 'text');
     input.setAttribute('id', key);
     input.setAttribute('name', key);
     form.appendChild(label);
@@ -138,8 +149,11 @@ function submitBook(formInfo, book) {
   Object.keys(book).forEach((field) => {
     if (field === 'info') { return }
     book[field] = formInfo[field].value;
+    console.log(field);
+    console.log(book[field]);
   })
   myLibrary.push(book);
+  console.log(myLibrary[myLibrary.length -1]);
   addBookToLibrary(book, myLibrary.length -1)
   removeForm();
 }
